@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Techne Nexus</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- WebGL Background -->
+  <canvas id="shader-canvas"></canvas>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <div class="logo">
+        <img src="/hero_logo.png" alt="Techne Nexus Logo" />
+      </div>
+      <nav>
+        <a href="#" class="btn btn-ghost" style="margin-right: 12px;">Servicios</a>
+        <a href="#" class="btn btn-primary">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container" style="display: flex; gap: 48px; align-items: center; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 300px;">
+        <span class="label-caps" style="color: var(--primary-container);">Innovación Arquitectónica</span>
+        <h1 style="margin-top: 16px; margin-bottom: 24px;">Construyendo el futuro digital para tu empresa</h1>
+        <p style="font-size: 18px; color: var(--on-surface-variant); margin-bottom: 32px; max-width: 500px;">
+          Posicionamos a tu empresa en la vanguardia tecnológica con soluciones que combinan diseño de clase mundial e ingeniería robusta.
+        </p>
+        <div style="display: flex; gap: 16px;">
+          <a href="#servicios" class="btn btn-primary">Explorar Servicios</a>
+        </div>
+      </div>
+      <div style="flex: 1; min-width: 300px; display: flex; justify-content: center;">
+        <img src="/header_photo.png" alt="Hero representation" style="max-width: 100%; border-radius: 24px; box-shadow: 0 0 60px rgba(0,212,255,0.2); border: 1px solid var(--border-subtle);" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="servicios" class="section-padding">
+    <div class="container">
+      <span class="label-caps" style="color: var(--primary-container); display: block; margin-bottom: 16px; text-align: center;">Nuestros Pilares</span>
+      <h2 style="text-align: center; margin-bottom: 64px;">Servicios Especializados</h2>
+      
+      <div class="grid-services">
+        <!-- Card: Cursos -->
+        <div class="glass-card cursos">
+          <div class="service-indicator indicator-cursos"></div>
+          <span class="chip chip-cursos" style="margin-bottom: 16px;">Cursos</span>
+          <h3 style="font-size: 24px; margin-bottom: 16px;">Capacitación de Élite</h3>
+          <p style="color: var(--on-surface-variant); margin-bottom: 24px;">
+            Programas formativos de alto nivel para dominar las herramientas y estrategias más avanzadas del mercado.
+          </p>
+          <a href="#" class="btn btn-ghost" style="width: 100%;">Ver Cursos</a>
+        </div>
+
+        <!-- Card: Consultoría -->
+        <div class="glass-card consultoria">
+          <div class="service-indicator indicator-consultoria"></div>
+          <span class="chip chip-consultoria" style="margin-bottom: 16px;">Consultoría</span>
+          <h3 style="font-size: 24px; margin-bottom: 16px;">Estrategia Digital</h3>
+          <p style="color: var(--on-surface-variant); margin-bottom: 24px;">
+            Análisis profundo y diseño de soluciones arquitectónicas para optimizar los procesos de tu negocio.
+          </p>
+          <a href="#" class="btn btn-ghost" style="width: 100%; border-color: var(--service-consultoria); color: var(--service-consultoria);">Agendar Sesión</a>
+        </div>
+
+        <!-- Card: Productos -->
+        <div class="glass-card productos">
+          <div class="service-indicator indicator-productos"></div>
+          <span class="chip chip-productos" style="margin-bottom: 16px;">Productos</span>
+          <h3 style="font-size: 24px; margin-bottom: 16px;">Desarrollo a Medida</h3>
+          <p style="color: var(--on-surface-variant); margin-bottom: 24px;">
+            Sistemas robustos, escalables y diseñados con precisión para resolver tus necesidades específicas.
+          </p>
+          <a href="#" class="btn btn-ghost" style="width: 100%; border-color: var(--service-productos); color: var(--service-productos);">Explorar Productos</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>
