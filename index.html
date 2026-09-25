@@ -1,93 +1,136 @@
 <!DOCTYPE html>
-<html lang="es">
+
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Techne Nexus</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+  </style>
 </head>
 <body>
-  <!-- WebGL Background -->
-  <canvas id="shader-canvas"></canvas>
+<!-- STITCH_SHADER_START:ANIMATION_7 class="fixed inset-0 w-full h-full" -->
+<div class="fixed inset-0 w-full h-full" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_7" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_7');
 
-  <!-- Header -->
-  <header class="header">
-    <div class="container nav-container">
-      <div class="logo">
-        <img src="/hero_logo.png" alt="Techne Nexus Logo" />
-      </div>
-      <nav>
-        <a href="#" class="btn btn-ghost" style="margin-right: 12px;">Servicios</a>
-        <a href="#" class="btn btn-primary">Contacto</a>
-      </nav>
-    </div>
-  </header>
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="container" style="display: flex; gap: 48px; align-items: center; flex-wrap: wrap;">
-      <div style="flex: 1; min-width: 300px;">
-        <span class="label-caps" style="color: var(--primary-container);">Innovación Arquitectónica</span>
-        <h1 style="margin-top: 16px; margin-bottom: 24px;">Construyendo el futuro digital para tu empresa</h1>
-        <p style="font-size: 18px; color: var(--on-surface-variant); margin-bottom: 32px; max-width: 500px;">
-          Posicionamos a tu empresa en la vanguardia tecnológica con soluciones que combinan diseño de clase mundial e ingeniería robusta.
-        </p>
-        <div style="display: flex; gap: 16px;">
-          <a href="#servicios" class="btn btn-primary">Explorar Servicios</a>
-        </div>
-      </div>
-      <div style="flex: 1; min-width: 300px; display: flex; justify-content: center;">
-        <img src="/header_photo.png" alt="Hero representation" style="max-width: 100%; border-radius: 24px; box-shadow: 0 0 60px rgba(0,212,255,0.2); border: 1px solid var(--border-subtle);" />
-      </div>
-    </div>
-  </section>
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
 
-  <!-- Services Section -->
-  <section id="servicios" class="section-padding">
-    <div class="container">
-      <span class="label-caps" style="color: var(--primary-container); display: block; margin-bottom: 16px; text-align: center;">Nuestros Pilares</span>
-      <h2 style="text-align: center; margin-bottom: 64px;">Servicios Especializados</h2>
-      
-      <div class="grid-services">
-        <!-- Card: Cursos -->
-        <div class="glass-card cursos">
-          <div class="service-indicator indicator-cursos"></div>
-          <span class="chip chip-cursos" style="margin-bottom: 16px;">Cursos</span>
-          <h3 style="font-size: 24px; margin-bottom: 16px;">Capacitación de Élite</h3>
-          <p style="color: var(--on-surface-variant); margin-bottom: 24px;">
-            Programas formativos de alto nivel para dominar las herramientas y estrategias más avanzadas del mercado.
-          </p>
-          <a href="#" class="btn btn-ghost" style="width: 100%;">Ver Cursos</a>
-        </div>
+void main() {
+    vec2 uv = v_texCoord;
+    vec3 color = vec3(0.04, 0.05, 0.09); // Deep navy background
+    
+    // Add some subtle moving gradients/nebula effects
+    float slowTime = u_time * 0.2;
+    float n = sin(uv.x * 3.0 + slowTime) * cos(uv.y * 2.0 - slowTime);
+    
+    vec3 accent = vec3(0.0, 0.83, 1.0); // Electric cyan
+    color += accent * (n * 0.15 + 0.15);
+    
+    // Grid effect
+    vec2 grid = fract(uv * 15.0 + sin(u_time * 0.1) * 0.1);
+    float line = smoothstep(0.0, 0.02, abs(grid.x - 0.5)) * smoothstep(0.0, 0.02, abs(grid.y - 0.5));
+    color += accent * (1.0 - line) * 0.05;
 
-        <!-- Card: Consultoría -->
-        <div class="glass-card consultoria">
-          <div class="service-indicator indicator-consultoria"></div>
-          <span class="chip chip-consultoria" style="margin-bottom: 16px;">Consultoría</span>
-          <h3 style="font-size: 24px; margin-bottom: 16px;">Estrategia Digital</h3>
-          <p style="color: var(--on-surface-variant); margin-bottom: 24px;">
-            Análisis profundo y diseño de soluciones arquitectónicas para optimizar los procesos de tu negocio.
-          </p>
-          <a href="#" class="btn btn-ghost" style="width: 100%; border-color: var(--service-consultoria); color: var(--service-consultoria);">Agendar Sesión</a>
-        </div>
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
 
-        <!-- Card: Productos -->
-        <div class="glass-card productos">
-          <div class="service-indicator indicator-productos"></div>
-          <span class="chip chip-productos" style="margin-bottom: 16px;">Productos</span>
-          <h3 style="font-size: 24px; margin-bottom: 16px;">Desarrollo a Medida</h3>
-          <p style="color: var(--on-surface-variant); margin-bottom: 24px;">
-            Sistemas robustos, escalables y diseñados con precisión para resolver tus necesidades específicas.
-          </p>
-          <a href="#" class="btn btn-ghost" style="width: 100%; border-color: var(--service-productos); color: var(--service-productos);">Explorar Productos</a>
-        </div>
-      </div>
-    </div>
-  </section>
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
 
-  <script type="module" src="/main.js"></script>
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_7 -->
+<script>
+  (function(d,t) {
+    var BASE_URL="https://web-production-f6176.up.railway.app";
+    var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+    g.src=BASE_URL+"/packs/js/sdk.js";
+    g.async = true;
+    s.parentNode.insertBefore(g,s);
+    g.onload=function(){
+      window.chatwootSDK.run({
+        websiteToken: 'JHZPnDd81ovossDmS1YUKyEF',
+        baseUrl: BASE_URL
+      })
+    }
+  })(document,"script");
+</script>
 </body>
 </html>
